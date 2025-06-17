@@ -1,39 +1,52 @@
 <!DOCTYPE html>
 <html>
+<head>
+  <title>Min Cost to Connect Ropes</title>
+</head>
 <body>
-  <h3>Min Cost Ropes</h3>
-  <p>Open console to see the result.</p>
+  <h2>Min Cost to Connect Ropes</h2>
+
+  <label for="inputArray">Enter rope lengths (comma separated):</label><br>
+  <input type="text" id="inputArray" placeholder="e.g. 4,3,2,6">
+  <button onclick="calculateMinCost()">Calculate Min Cost</button>
+
+  <h3 id="result"></h3>
 
   <script>
-    function mincost(arr) {
-      // Make a shallow copy to avoid modifying original
-      arr = arr.slice().sort((a, b) => a - b); // Sort array initially
-      
-      let cost = 0;
+    function calculateMinCost() {
+      const input = document.getElementById("inputArray").value;
+      const arr = input.split(',').map(Number).filter(n => !isNaN(n));
 
-      while (arr.length > 1) {
-        let first = arr.shift();  // Smallest
-        let second = arr.shift(); // Second smallest
-        let sum = first + second;
-        cost += sum;
-
-        // Insert sum back keeping the array sorted
-        let inserted = false;
-        for (let i = 0; i < arr.length; i++) {
-          if (sum < arr[i]) {
-            arr.splice(i, 0, sum);
-            inserted = true;
-            break;
-          }
-        }
-        if (!inserted) arr.push(sum); // if sum is largest, push at end
+      if (arr.length === 0) {
+        document.getElementById("result").innerText = "Please enter valid rope lengths.";
+        return;
       }
 
-      return cost;
+      const minCost = getMinCost(arr);
+      document.getElementById("result").innerText = "Minimum cost to connect ropes: " + minCost;
     }
 
-    console.log("Min Cost:", mincost([4, 3, 2, 6]));  // Output: 29
-    console.log("Min Cost:", mincost([1, 2, 3, 4, 5])); // Output: 33
+    function getMinCost(arr) {
+      // Custom min-heap using sorting
+      let heap = [...arr];
+      heap.sort((a, b) => a - b); // Initial sort
+
+      let totalCost = 0;
+
+      while (heap.length > 1) {
+        // Get the two smallest ropes
+        const first = heap.shift();
+        const second = heap.shift();
+        const cost = first + second;
+        totalCost += cost;
+
+        // Insert the new rope back and sort again
+        heap.push(cost);
+        heap.sort((a, b) => a - b);
+      }
+
+      return totalCost;
+    }
   </script>
 </body>
 </html>
