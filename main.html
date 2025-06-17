@@ -6,20 +6,29 @@
 
   <script>
     function mincost(arr) {
-      arr.sort((a, b) => a - b); // sort array
+      // Make a shallow copy to avoid modifying original
+      arr = arr.slice().sort((a, b) => a - b); // Sort array initially
       
       let cost = 0;
+
       while (arr.length > 1) {
-        let first = arr.shift();
-        let second = arr.shift();
+        let first = arr.shift();  // Smallest
+        let second = arr.shift(); // Second smallest
         let sum = first + second;
         cost += sum;
 
-        // Insert back in sorted order
-        let i = 0;
-        while (i < arr.length && arr[i] < sum) i++;
-        arr.splice(i, 0, sum);
+        // Insert sum back keeping the array sorted
+        let inserted = false;
+        for (let i = 0; i < arr.length; i++) {
+          if (sum < arr[i]) {
+            arr.splice(i, 0, sum);
+            inserted = true;
+            break;
+          }
+        }
+        if (!inserted) arr.push(sum); // if sum is largest, push at end
       }
+
       return cost;
     }
 
