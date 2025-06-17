@@ -2,6 +2,23 @@
 <html>
 <head>
   <title>Min Cost to Connect Ropes</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      padding: 20px;
+    }
+
+    input, button {
+      padding: 8px;
+      font-size: 16px;
+      margin: 8px 0;
+    }
+
+    #result {
+      font-weight: bold;
+      margin-top: 15px;
+    }
+  </style>
 </head>
 <body>
   <h2>Min Cost to Connect Ropes</h2>
@@ -10,37 +27,36 @@
   <input type="text" id="inputArray" placeholder="e.g. 4,3,2,6">
   <button onclick="calculateMinCost()">Calculate Min Cost</button>
 
-  <h3 id="result"></h3>
+  <div id="result"></div>
 
   <script>
     function calculateMinCost() {
       const input = document.getElementById("inputArray").value;
-      const arr = input.split(',').map(Number).filter(n => !isNaN(n));
+      const arr = input.split(',').map(str => parseInt(str.trim())).filter(n => !isNaN(n) && n > 0);
 
-      if (arr.length === 0) {
-        document.getElementById("result").innerText = "Please enter valid rope lengths.";
+      const resultEl = document.getElementById("result");
+
+      if (arr.length < 2) {
+        resultEl.innerText = "Please enter at least two valid positive integers.";
         return;
       }
 
       const minCost = getMinCost(arr);
-      document.getElementById("result").innerText = "Minimum cost to connect ropes: " + minCost;
+      resultEl.innerText = "✅ Minimum cost to connect ropes: " + minCost;
     }
 
     function getMinCost(arr) {
-      // Custom min-heap using sorting
       let heap = [...arr];
-      heap.sort((a, b) => a - b); // Initial sort
+      heap.sort((a, b) => a - b);
 
       let totalCost = 0;
 
       while (heap.length > 1) {
-        // Get the two smallest ropes
         const first = heap.shift();
         const second = heap.shift();
         const cost = first + second;
         totalCost += cost;
 
-        // Insert the new rope back and sort again
         heap.push(cost);
         heap.sort((a, b) => a - b);
       }
