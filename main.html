@@ -25,44 +25,9 @@
 
   <label for="inputArray">Enter rope lengths (comma separated):</label><br>
   <input type="text" id="inputArray" placeholder="e.g. 4,3,2,6">
-  <button onclick="calculateMinCost()">Calculate Min Cost</button>
+  <button onclick="calculateMinCost()">Calculate</button>
 
   <div id="result"></div>
-
-  <script>
-    function calculateMinCost() {
-      const input = document.getElementById("inputArray").value;
-      const arr = input.split(',').map(str => parseInt(str.trim())).filter(n => !isNaN(n) && n > 0);
-
-      const resultEl = document.getElementById("result");
-
-      if (arr.length < 2) {
-        resultEl.innerText = "Please enter at least two valid positive integers.";
-        return;
-      }
-
-      const minCost = getMinCost(arr);
-      resultEl.innerText = "✅ Minimum cost to connect ropes: " + minCost;
-    }
-
-    function getMinCost(arr) {
-      let heap = [...arr];
-      heap.sort((a, b) => a - b);
-
-      let totalCost = 0;
-
-      while (heap.length > 1) {
-        const first = heap.shift();
-        const second = heap.shift();
-        const cost = first + second;
-        totalCost += cost;
-
-        heap.push(cost);
-        heap.sort((a, b) => a - b);
-      }
-
-      return totalCost;
-    }
-  </script>
+<script src="myscripts.js"></script>
 </body>
 </html>
